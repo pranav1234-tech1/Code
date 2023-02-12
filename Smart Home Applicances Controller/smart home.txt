@@ -1,0 +1,202 @@
+#include <iostream>
+using namespace std;
+
+class Person_Detection{
+	
+public:
+	int person_hall1 = 0;
+	int person_hall2 = 0;
+	int n = 0;
+	int a = 0;
+	
+protected:
+	
+	int detect_persons()
+	{
+		person_hall1 = 0;
+		person_hall2 = 0;
+		n = 0;
+	a = 0;
+		cout<<"\nAre there any persons present in hall 1? Type 1 for yes, 0 for no: ";
+		cin>>n;
+		
+		if(n==1)
+		{
+			person_hall1 = 1;
+		}
+		
+		cout<<"\nAre there any persons present in hall 2? Type 1 for yes, 0 for no: ";
+		cin>>a;
+		
+		if(a==1)
+		{
+			person_hall2 = 1;
+		}
+		
+		if(n==0 && a==0)
+		{
+			cout<<"\nThere are no persons in either rooms.";
+			return 0;
+		}	
+		else if(n==1 && a==0)
+		{
+			cout<<"\nPersons in room 1 not in room 2.";
+			return 1;
+		}
+		else if(n==0 && a==1)
+		{
+			cout<<"\nPersons not in room 1 only in room 2.";
+			return 2;
+		}
+		else
+		{
+			cout<<"\nPersons in both the rooms.";
+			return 3;
+		}
+	}
+	
+};
+
+class Fan_Control{
+
+public:
+	int hall1_fan;
+	int hall2_fan; 
+	
+protected:
+	
+	fan_on_off(int a,int b)
+	{
+		hall1_fan=0;
+		hall2_fan=0;
+		
+		if(a==0 && b==0)
+		{
+			hall1_fan = 0;
+			hall2_fan = 0;	
+		}	
+		else if(a==1 && b==0)
+		{
+			hall1_fan = 1;
+			hall2_fan = 0;	
+		}
+		else if(a==0 && b==1)
+		{
+			hall1_fan = 0;
+			hall2_fan = 1;	
+		}
+		else
+		{
+			hall1_fan = 1;
+			hall2_fan = 1;	
+		}	
+	}	
+};
+
+class Light_Control{
+	
+public:
+	int n = 0;
+	int z = 0;
+	int lightint_hall1 = 0;
+	int lightint_hall2 = 0;
+	int light_hall1 = 0;
+	int light_hall2 = 0;
+		
+protected:
+	int light_on_off(int a,int b)
+	{
+		lightint_hall1 = 0;
+		lightint_hall2 = 0;
+		light_hall1 = 0;
+		light_hall2 = 0;
+		cout<<"\nEnter the intensity for hall 1: (1 for high and 0 for low): ";
+		cin>>n;	
+		if(n==1)
+		{
+			lightint_hall1 = 1;	
+		}
+		cout<<"\nEnter the intensity for hall 2: (1 for high and 0 for low): ";
+		cin>>z;	
+		if(z==1)
+		{
+			lightint_hall2 = 1;	
+		}	
+	
+		if(lightint_hall1==0 && a==1)
+		{
+			light_hall1 = 1;		
+		}
+		if(lightint_hall2==0 && b==1)
+		{
+			light_hall2 = 1;
+		}
+		
+	}
+};
+
+class Smart_Home : public Person_Detection,public Fan_Control,public Light_Control
+{
+public:
+	int a;
+	int f;
+	my_function()
+	{
+		a = detect_persons();
+		
+		if(a==0)
+		{
+			fan_on_off(0,0);
+			light_on_off(0,0);
+		}
+		else if(a==1)
+		{
+			fan_on_off(1,0);
+			light_on_off(1,0);
+		}
+		else if(a==2)
+		{
+			fan_on_off(0,1);
+			light_on_off(0,1);
+		}
+		else
+		{
+			fan_on_off(1,1);
+			light_on_off(1,1);
+		}
+	}
+	
+	print_status()
+	{
+		cout<<"\nFor hall 1: ";
+		cout<<"\nPerson (1 for present, 0 for absent)   : "<<person_hall1;
+		cout<<"\nFan (1  for on, 0 for off)             : "<<hall1_fan;
+		cout<<"\nLight intensity (1 for high, 0 for low): "<<lightint_hall1;
+		cout<<"\nLight (1 for on, 0 for off)            : "<<light_hall1;
+		cout<<"\n----------------------------------------------------------\n";
+		cout<<"\nFor hall 2: ";
+		cout<<"\nPerson (1 for present, 0 for absent)   : "<<person_hall2;
+		cout<<"\nFan (1  for on, 0 for off)             : "<<hall2_fan;
+		cout<<"\nLight intensity (1 for high, 0 for low): "<<lightint_hall2;
+		cout<<"\nLight (1 for on, 0 for off)            : "<<light_hall2;
+	}
+};
+
+int main()
+{
+	Smart_Home MyHouse;
+	int p = 1;
+	int y;
+	
+	cout<<"\n********************** Welcome to the smart home. **********************\n\n";
+	
+	while(p==1)
+	{
+		MyHouse.my_function();
+		MyHouse.print_status();
+		
+		cout<<"\nDo you wish to continue (Press 1 for continuing, 0 for exiting the application)?: ";
+		cin>>p;
+		cout<<"\n*************************************************************************\n";		
+	}
+}

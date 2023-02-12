@@ -1,0 +1,31 @@
+int TheSensor = 12;
+int led = 7;
+
+void setup() 
+{
+  Serial.begin(9600);
+  pinMode(TheSensor,INPUT);
+  pinMode(led,OUTPUT);
+ 
+}
+
+void loop() 
+{
+  int value = digitalRead(TheSensor);
+  Serial.println("--");
+
+  Serial.print("The value of the sensor is = ");
+
+  Serial.print(value);
+  delay(1000);
+
+  if(value == 0)
+  {
+    digitalWrite(led, HIGH);
+  }
+  else
+  {
+    digitalWrite(led, LOW);
+  }
+  delay(60);
+}

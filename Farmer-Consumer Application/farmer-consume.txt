@@ -1,0 +1,274 @@
+#include <fstream>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int price_potato;
+int price_tomato;
+int price_coconut;
+int stock_potato;
+int stock_tomato;
+int stock_coconut;
+
+
+class Government_Market
+{
+public:
+	void print_stock()
+	{
+		cout<<"\nThe stock for potato is: "<<stock_potato<<" kgs.";
+		cout<<"\nThe stock for tomato is: "<<stock_tomato<<" kgs.";
+		cout<<"\nThe stock for coconut is: "<<stock_coconut<<" kgs.";
+	}
+	
+	void set_price()
+	{
+		cout<<"\nEnter the price for potato per kg: ";
+		cin>>price_potato;
+		cout<<"\nEnter the price for tomato per kg: ";
+		cin>>price_tomato;
+		cout<<"\nEnter the price for coconut per kg: ";
+		cin>>price_coconut;
+	}
+};
+
+class Farmer : public Government_Market
+{
+public:
+	string name = "null";
+	int mobile_number;
+	int quantity_potato;
+	int quantity_tomato;
+	int quantity_coconut;
+	
+	int p;
+	int t;
+	int c;
+	int total;
+	
+	void vegetables_sale()
+	{
+		cout<<"\nEnter the number of kgs of potatoes available for sale: ";
+		cin>>quantity_potato;
+		cout<<"\nEnter the number of kgs of tomatoes available for sale: ";
+		cin>>quantity_tomato;
+		cout<<"\nEnter the number of kgs of coconuts available for sale: ";
+		cin>>quantity_coconut;
+		
+		stock_potato = stock_potato + quantity_potato;
+		stock_tomato = stock_tomato + quantity_tomato;
+		stock_coconut = stock_coconut + quantity_coconut;
+		
+		p = quantity_potato*price_potato;
+		t = quantity_tomato*price_tomato;
+		c = quantity_coconut*price_coconut;
+		total = p + t + c;
+	
+	}	
+};
+
+class Consumer : public Government_Market
+{
+public:
+	int quantity_potato;
+	int quantity_tomato;
+	int quantity_coconut;
+	int p;
+	int t;
+	int c;
+	int total;
+
+	void vegetables_purchase()
+	{
+		cout<<"\nEnter the number of kgs of potatoes to be bought: ";
+		cin>>quantity_potato;
+		cout<<"\nEnter the number of kgs of tomatoes to be bought: ";
+		cin>>quantity_tomato;
+		cout<<"\nEnter the number of kgs of coconuts to be bought: ";
+		cin>>quantity_coconut;
+		
+		while(quantity_potato>stock_potato)
+		{
+			cout<<"\nThe entered number of potatoes are not available for sale. Please enter valid number: ";
+			cin>>quantity_potato;
+		}
+		
+		while(quantity_tomato>stock_tomato)
+		{
+			cout<<"\nThe entered number of tomatoes are not available for sale. Please enter valid number: ";
+			cin>>quantity_tomato;
+		}
+		
+		while(quantity_coconut>stock_coconut)
+		{
+			cout<<"\nThe entered number of coconuts are not available for sale. Please enter valid number: ";
+			cin>>quantity_coconut;
+		}
+		
+		stock_potato = stock_potato - quantity_potato;
+		stock_tomato = stock_tomato - quantity_tomato;
+		stock_coconut = stock_coconut - quantity_coconut;
+
+		p = quantity_potato*price_potato;
+		t = quantity_tomato*price_tomato;
+		c = quantity_coconut*price_coconut;
+		total = p + t + c;
+	}
+};
+
+int main()
+{
+	Government_Market g;
+	Farmer f1;
+	Farmer f2;
+	Consumer c1;
+	Consumer c2;
+	
+	ofstream consumer;
+	
+	consumer.open("Consumer.txt",ios_base::app);
+	
+	ofstream farmer;
+	
+	farmer.open("Farmer.txt",ios_base::app);
+	
+	
+	ifstream consumer1;
+	
+	consumer1.open("Consumer.text",ios_base::ate);
+	
+	ifstream farmer1;
+	
+	farmer1.open("Farmer.txt",ios_base::ate);
+	
+	int n=0;
+	int p=0;
+	cout<<"\n************** Welcome to Farmer-Consumer application **************\n";
+	while(n!=6)
+	{
+		cout<<"\n\nEnter your choice:\n1 for fixing/updating price as government official\n2 for selling vegetables as farmer\n3 for checking the stock of vegetables as "; 
+		cout<<"farmer\n4 for checking the stock of vegetables as consumer\n5 for buying the vegetables as consumer\n6 for exiting the applciation.";
+		cout<<"\n\nEnter your choice: ";
+		cin>>n;
+		switch(n){	
+			case 1:
+				g.set_price();
+				break;
+			case 2:
+				cout<<"\nWhich farmer wishes to sell vegetables - Farmer 1 or Farmer 2 ?: ";
+				cin>>p;
+				if(p==1)
+				{
+					if(f1.name == "null")
+					{
+						cout<<"\nEnter your name farmer 1: ";
+						cin>>f1.name;
+						cout<<"\nEnter your mobile number "<<f1.name<<": ";
+						cin>>f1.mobile_number;
+					}
+					f1.vegetables_sale();
+					farmer<<"\nThe amount earned by "<<f1.name<<"from the sale of potatoes is: "<<f1.p<<" ruppees.";	
+					farmer<<"\nThe amount earned by "<<f1.name<<"from the sale of tomatoes is: "<<f1.t<<" ruppees.";
+					farmer<<"\nThe amount earned by "<<f1.name<<"from the sale of coconuts is: "<<f1.c<<" ruppees.";
+					farmer<<"\nThe total amount earned by "<<f1.name<<" is: "<<f1.total<<" ruppees.\n";
+
+					farmer1 >> f1.name;
+					farmer1 >> f1.p;
+					farmer1 >> f1.t;
+					farmer1 >> f1.c;
+					farmer1 >> f1.total;
+					
+					cout<<"\n ************ Reading from file ************\n";
+					cout<<"\nThe amount earned by "<<f1.name<<"from the sale of potatoes is: "<<f1.p<<" ruppees.";	
+					cout<<"\nThe amount earned by "<<f1.name<<"from the sale of tomatoes is: "<<f1.t<<" ruppees.";
+					cout<<"\nThe amount earned by "<<f1.name<<"from the sale of coconuts is: "<<f1.c<<" ruppees.";
+					cout<<"\nThe total amount earned by "<<f1.name<<" is: "<<f1.total<<" ruppees.";
+					
+				}
+				else
+				{
+					if(f2.name == "null")
+					{
+						cout<<"\nEnter your name farmer 2: ";
+						cin>>f2.name;
+						cout<<"\nEnter your mobile number "<<f2.name<<": ";
+						cin>>f2.mobile_number;
+					}
+					f2.vegetables_sale();
+					farmer<<"\nThe amount earned by "<<f2.name<<"from the sale of potatoes is: "<<f2.p<<" ruppees.";	
+					farmer<<"\nThe amount earned by "<<f2.name<<"from the sale of tomatoes is: "<<f2.t<<" ruppees.";
+					farmer<<"\nThe amount earned by "<<f2.name<<"from the sale of coconuts is: "<<f2.c<<" ruppees.";
+					farmer<<"\nThe total amount earned by "<<f2.name<<" is: "<<f2.total<<" ruppees.\n";
+
+					farmer1 >> f2.name;
+					farmer1 >> f2.p;
+					farmer1 >> f2.t;
+					farmer1 >> f2.c;
+					farmer1 >> f2.total;
+					
+					cout<<"\n ************ Reading from file ************\n";
+					cout<<"\nThe amount earned by "<<f2.name<<"from the sale of potatoes is: "<<f2.p<<" ruppees.";	
+					cout<<"\nThe amount earned by "<<f2.name<<"from the sale of tomatoes is: "<<f2.t<<" ruppees.";
+					cout<<"\nThe amount earned by "<<f2.name<<"from the sale of coconuts is: "<<f2.c<<" ruppees.";
+					cout<<"\nThe total amount earned by "<<f2.name<<" is: "<<f2.total<<" ruppees.\n";
+				}
+				break;
+			case 3:
+				f1.print_stock();
+				break;
+			case 4:
+				c1.print_stock();
+				break;
+			case 5:
+				cout<<"\nWhich consumer wishes to buy vegetables - Consumer 1 or Consumer 2 ?: ";
+				cin>>p;
+				if(p==1)
+				{
+					c1.vegetables_purchase();
+					consumer<<"\nThe amount spent by customer 1 on the purchase of potatoes is: "<<c1.p<<" ruppees.";
+					consumer<<"\nThe amount spent by customer 1 on the purchase of tomatoes is: "<<c1.t<<" ruppees.";
+					consumer<<"\nThe amount spent by customer 1 on the purchase of coconuts is: "<<c1.c<<" ruppees.";	
+					consumer<<"\nThe total amount spent by customer 1 is: "<<c1.total<<" ruppees.\n";
+		
+					consumer1 >> c1.p;
+					consumer1 >> c1.t;
+					consumer1 >> c1.c;
+					consumer1 >> c1.total;
+					
+					cout<<"\n ************ Reading from file ************\n";
+					cout<<"\nThe amount spent by customer 1 on the purchase of potatoes is: "<<c1.p<<" ruppees.";
+					cout<<"\nThe amount spent by customer 1 on the purchase of tomatoes is: "<<c1.t<<" ruppees.";
+					cout<<"\nThe amount spent by customer 1 on the purchase of coconuts is: "<<c1.c<<" ruppees.";	
+					cout<<"\nThe total amount spent by customer 1 is: "<<c1.total<<" ruppees.\n";
+				}
+				else
+				{
+					c2.vegetables_purchase();
+					consumer<<"\nThe amount spent by customer 2 on the purchase of potatoes is: "<<c2.p<<" ruppees.";
+					consumer<<"\nThe amount spent by customer 2 on the purchase of tomatoes is: "<<c2.t<<" ruppees.";
+					consumer<<"\nThe amount spent by customer 2 on the purchase of coconuts is: "<<c2.c<<" ruppees.";	
+					consumer<<"\nThe total amount spent by customer 2 is: "<<c2.total<<" ruppees.\n";
+					
+					consumer1 >> c2.p;
+					consumer1 >> c2.t;
+					consumer1 >> c2.c;
+					consumer1 >> c2.total;
+					
+					cout<<"\n ************ Reading from file ************\n";
+					cout<<"\nThe amount spent by customer 2 on the purchase of potatoes is: "<<c2.p<<" ruppees.";
+					cout<<"\nThe amount spent by customer 2 on the purchase of tomatoes is: "<<c2.t<<" ruppees.";
+					cout<<"\nThe amount spent by customer 2 on the purchase of coconuts is: "<<c2.c<<" ruppees.";	
+					cout<<"\nThe total amount spent by customer 2 is: "<<c2.total<<" ruppees.\n";
+				}
+				break;	
+		}
+	}
+	cout<<"\n\n************** Thank you for using the Farmer-Consumer application **************";
+	farmer << "\n\n****************** The program output has ended ******************";	
+	consumer << "\n\n****************** The program output has ended ******************";
+	
+	return 0;
+	
+	
+}
